@@ -81,7 +81,6 @@
                 android:layout_weight="0.2"
                 android:gravity="center"
                 android:text="@string/signIn"
-                android:onClick="login"
                 />
         </LinearLayout>
     </LinearLayout>

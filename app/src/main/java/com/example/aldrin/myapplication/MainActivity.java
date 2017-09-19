@@ -9,22 +9,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
+@EActivity(R.layout.login_layout)
 public class MainActivity extends AppCompatActivity {
 
-    private EditText usernameText;
-    private EditText passwordText;
-    private CheckBox rememberMeCheckbox;
+    @ViewById(R.id.username)
+    EditText usernameText;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout);
+    @ViewById(R.id.password)
+    EditText passwordText;
 
-        usernameText = (EditText) findViewById(R.id.username);
-        passwordText = (EditText) findViewById(R.id.password);
-        rememberMeCheckbox = (CheckBox) findViewById(R.id.remeberMe);
-    }
+    @ViewById(R.id.remeberMe)
+    CheckBox rememberMeCheckbox;
 
+    @Click(R.id.signInButton)
     public void login(View v){
         String message = String.format("username: %s \n password: %s \n rememberMe: %s",
                 usernameText.getText(),
