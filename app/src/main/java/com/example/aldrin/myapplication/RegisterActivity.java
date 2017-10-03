@@ -34,17 +34,12 @@ public class RegisterActivity extends AppCompatActivity {
         if(StringUtils.isBlank(n) || StringUtils.isBlank(e) || StringUtils.isBlank(p)){
             Toast.makeText(this, "ALL FIELDS NEEDED", Toast.LENGTH_SHORT);
         } else {
-            Intent i = new Intent();
-            i.putExtra("username", e);
-            i.putExtra("password", p);
-            setResult(Activity.RESULT_OK, i);
-            finish();
+
         }
     }
 
     @Click(R.id.cancelBtn)
     public void onCancelClick(){
-        setResult(Activity.RESULT_CANCELED, new Intent());
         finish();
     }
 }
