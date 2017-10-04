@@ -23,10 +23,7 @@ import model.User;
 @EActivity(R.layout.login_layout)
 public class MainActivity extends AppCompatActivity {
 
-    private static final String HARDCODED_USERNAME = "aldrin";
-    private static final String HARDCODED_PASSWORD = "password";
     public static final String REMEMBER_ME = "REMEMBER_ME";
-
 
     @ViewById(R.id.username)
     EditText usernameText;
@@ -43,22 +40,27 @@ public class MainActivity extends AppCompatActivity {
     public void login(View v){
         String u = usernameText.getText().toString();
         String p = passwordText.getText().toString();
+        User user = getUser();
         if(StringUtils.isEmpty(u) && StringUtils.isEmpty(p)){
             Toast.makeText(this, "No user", Toast.LENGTH_SHORT).show();
-        } else if(HARDCODED_USERNAME.equals(u) && HARDCODED_PASSWORD.equals(p)){
+        } else if(user != null && user.isCredentialsCorrect(u,p)){
             Intent i = new Intent(this, WelcomeActivity_.class);
-            i.putExtra("username", u);
             startActivity(i);
         } else {
             Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private User getUser(){
+        SharedPreferences prefs = getSharedPreferences("RegisterActivity_", MODE_PRIVATE);
+        String userJSON = prefs.getString(User.KEY, "");
+        return StringUtils.isNotBlank(userJSON) ? gson.fromJson(userJSON, User.class) : null;
+    }
+
     @AfterViews
     public void showRegisterPageIfNoRegisteredUser(){
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-        String userJSON = prefs.getString(User.KEY, "");
-        User user = StringUtils.isNotBlank(userJSON) ? gson.fromJson(userJSON, User.class) : null;
+        User user = getUser();
         if(prefs.getBoolean(REMEMBER_ME, false)){
             if(user != null){
                 usernameText.setText(user.getUsername());
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         } else if(user == null){
             register();
         }
+        rememberMeCheckbox.setChecked(prefs.getBoolean(REMEMBER_ME, false));
     }
 
     @Click(R.id.registerButton)
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRememberMeChange(){
         SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
         editor.putBoolean(REMEMBER_ME, rememberMeCheckbox.isChecked());
-        Toast.makeText(this, String.valueOf(rememberMeCheckbox.isChecked()), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, String.valueOf(rememberMeCheckbox.isChecked()), Toast.LENGTH_SHORT).show();
         editor.commit();
     }
 }

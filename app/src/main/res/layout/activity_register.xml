@@ -30,6 +30,13 @@
         android:inputType="textPassword" />
 
 
+    <DatePicker
+        android:id="@+id/birthday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
