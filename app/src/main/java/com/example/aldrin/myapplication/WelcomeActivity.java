@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import io.realm.Realm;
 import model.User;
 
 @EActivity(R.layout.activity_welcome)
@@ -44,8 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private User getUser(){
-        SharedPreferences prefs = getSharedPreferences("RegisterActivity_", MODE_PRIVATE);
-        String userJSON = prefs.getString(User.KEY, "");
-        return StringUtils.isNotBlank(userJSON) ? gson.fromJson(userJSON, User.class) : null;
+        Realm realm  = Realm.getDefaultInstance();
+        return realm.where(User.class).findFirst();
     }
 }
