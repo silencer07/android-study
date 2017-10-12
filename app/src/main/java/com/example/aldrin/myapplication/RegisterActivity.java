@@ -70,8 +70,6 @@ public class RegisterActivity extends AppCompatActivity {
                      user.setUsername(n);
                      user.setPassword(p);
                      user.setEmail(e);
-
-                     realm.copyToRealmOrUpdate(user);
                  }
              });
             Toast.makeText(this, "User data saved!", Toast.LENGTH_SHORT).show();
