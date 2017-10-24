@@ -63,7 +63,8 @@ public class RegisterActivity extends AppCompatActivity {
                  public void execute(Realm realm) {
                      User user = realm.where(User.class).findFirst();
                      if(user == null){
-                         user = realm.createObject(User.class);
+                         user = new User();
+                         user = realm.createObject(User.class, 1);
                      }
 
                      user.setBirthdate(c.getTime());
