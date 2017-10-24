@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 def AAVersion = '4.3.1'
+def realmVersion = '4.1.0'
 
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
@@ -40,8 +41,8 @@ dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
 
-    apt 'io.realm:realm-android-library:3.7.2'
-    compile 'io.realm:realm-android-library:3.7.2'
+    apt "io.realm:realm-android-library:$realmVersion"
+    compile "io.realm:realm-android-library:$realmVersion"
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     compile 'com.android.support:appcompat-v7:25.1.1'
