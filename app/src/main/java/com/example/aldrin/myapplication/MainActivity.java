@@ -77,8 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Click(R.id.registerButton)
     public void register(){
-        Intent i = new Intent(this, RegisterActivity_.class);
         startActivity(new Intent(this, RegisterActivity_.class));
+    }
+
+    @Click(R.id.userListButton)
+    public void showUserList(){
+        startActivity(new Intent(this, UserListActivity_.class));
     }
 
     @CheckedChange(R.id.remeberMe)

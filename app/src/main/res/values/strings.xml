@@ -6,4 +6,5 @@
     <string name="rememberMe">Remember me</string>
     <string name="signIn">sign in</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_user_list">UserListActivity</string>
 </resources>

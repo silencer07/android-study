@@ -41,6 +41,7 @@ dependencies {
     apt "io.realm:realm-android-library:$project.realmVersion"
     compile "io.realm:realm-android-library:$project.realmVersion"
 
+    compile 'io.realm:android-adapters:2.1.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.6'
     compile 'com.android.support:appcompat-v7:25.1.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha9'
