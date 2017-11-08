@@ -24,28 +24,27 @@ import model.User;
 @EActivity(R.layout.activity_welcome)
 public class WelcomeActivity extends AppCompatActivity {
 
-    Gson gson = new Gson();
-
     @ViewById(R.id.welcomeText)
     TextView welcomeText;
 
-
     @AfterViews
     public void initialize(){
-        if(StringUtils.isBlank(welcomeText.getText())) {
-            User user = getUser();
-            StringBuilder welcome = new StringBuilder("Welcome ")
-                    .append(user.getUsername());
-            SimpleDateFormat fmt = new SimpleDateFormat("MMdd", Locale.US);
-            if (fmt.format(new Date()).equals(fmt.format(user.getBirthdate()))) {
-                welcome.append(" and happy birthday");
-            }
-            welcomeText.setText(welcome.toString());
+        Intent i = getIntent();
+        User user = getUser(i.getStringExtra(MainActivity.LOGGED_IN_USER));
+
+        StringBuilder welcome = new StringBuilder("Welcome ")
+                .append(user.getUsername());
+        SimpleDateFormat fmt = new SimpleDateFormat("MMdd", Locale.US);
+
+        if (fmt.format(new Date()).equals(fmt.format(user.getBirthdate()))) {
+            welcome.append(" and happy birthday");
         }
+
+        welcomeText.setText(welcome.toString());
     }
 
-    private User getUser(){
+    private User getUser(String username){
         Realm realm  = Realm.getDefaultInstance();
-        return realm.where(User.class).findFirst();
+        return realm.where(User.class).equalTo("username", username).findFirst();
     }
 }

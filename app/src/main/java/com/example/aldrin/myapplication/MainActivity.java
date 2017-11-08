@@ -26,6 +26,9 @@ import model.User;
 public class MainActivity extends AppCompatActivity {
 
     public static final String REMEMBER_ME = "REMEMBER_ME";
+    public static final String USERNAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
+    public static final String LOGGED_IN_USER = "loggedInUser";
 
     @ViewById(R.id.username)
     EditText usernameText;
@@ -42,42 +45,45 @@ public class MainActivity extends AppCompatActivity {
     public void login(View v){
         String u = usernameText.getText().toString();
         String p = passwordText.getText().toString();
-        User user = getUser();
         if(StringUtils.isEmpty(u) && StringUtils.isEmpty(p)){
             Toast.makeText(this, "No user", Toast.LENGTH_SHORT).show();
-        } else if(user != null && user.isCredentialsCorrect(u,p)){
+            return;
+        }
+
+        User user = getUser(u, p);
+        if(user != null && user.isCredentialsCorrect(u,p)){
+            onRememberMeChange();
             Intent i = new Intent(this, WelcomeActivity_.class);
+            i.putExtra(LOGGED_IN_USER, u);
             startActivity(i);
         } else {
             Toast.makeText(this, "Invalid credentials", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private User getUser(){
+    private User getUser(String username, String password){
         Realm realm  = Realm.getDefaultInstance();
-        return realm.where(User.class).findFirst();
+        return realm.where(User.class).equalTo("username", username).equalTo("password", password).findFirst();
+    }
+
+    private boolean hasUsers(){
+        Realm realm  = Realm.getDefaultInstance();
+        return realm.where(User.class).count() > 0;
     }
 
     @AfterViews
     public void showRegisterPageIfNoRegisteredUser(){
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-        User user = getUser();
         if(prefs.getBoolean(REMEMBER_ME, false)){
-            if(user != null){
-                usernameText.setText(user.getUsername());
-                passwordText.setText(user.getPassword());
-            } else {
-                Toast.makeText(this, "Nothing to remember",Toast.LENGTH_SHORT).show();
-            }
-        } else if(user == null){
-            register();
+            usernameText.setText(prefs.getString(USERNAME, ""));
+            passwordText.setText(prefs.getString(PASSWORD, ""));
         }
-        rememberMeCheckbox.setChecked(prefs.getBoolean(REMEMBER_ME, false));
-    }
 
-    @Click(R.id.registerButton)
-    public void register(){
-        startActivity(new Intent(this, RegisterActivity_.class));
+        if(!hasUsers()){
+            startActivity(new Intent(this, RegisterActivity_.class));
+        } else {
+            rememberMeCheckbox.setChecked(prefs.getBoolean(REMEMBER_ME, false));
+        }
     }
 
     @Click(R.id.userListButton)
@@ -89,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
     public void onRememberMeChange(){
         SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
         editor.putBoolean(REMEMBER_ME, rememberMeCheckbox.isChecked());
+        editor.putString(USERNAME, usernameText.getText().toString());
+        editor.putString(PASSWORD, passwordText.getText().toString());
 //        Toast.makeText(this, String.valueOf(rememberMeCheckbox.isChecked()), Toast.LENGTH_SHORT).show();
         editor.commit();
     }

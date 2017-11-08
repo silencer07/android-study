@@ -11,13 +11,12 @@ public class User extends RealmObject{
 
     public static final String KEY = "KEY";
 
+    @PrimaryKey
     private String username;
+
     private String password;
     private String email;
     private Date birthdate;
-
-    @PrimaryKey
-    private long id;
 
     public boolean isCredentialsCorrect(String username, String password){
         return StringUtils.equals(this.username, username) && StringUtils.equals(this.password, password);
@@ -53,13 +52,5 @@ public class User extends RealmObject{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }

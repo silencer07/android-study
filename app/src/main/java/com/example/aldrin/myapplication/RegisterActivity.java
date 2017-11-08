@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Calendar;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import model.User;
@@ -58,23 +59,23 @@ public class RegisterActivity extends AppCompatActivity {
             c.set(Calendar.DAY_OF_MONTH, birthdayPicker.getDayOfMonth());
 
             Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                 @Override
-                 public void execute(Realm realm) {
-                     User user = realm.where(User.class).findFirst();
-                     if(user == null){
-                         user = new User();
-                         user = realm.createObject(User.class, 1);
-                     }
+            long count = realm.where(User.class).contains("username", n, Case.INSENSITIVE).count();
 
-                     user.setBirthdate(c.getTime());
-                     user.setUsername(n);
-                     user.setPassword(p);
-                     user.setEmail(e);
-                 }
-             });
-            Toast.makeText(this, "User data saved!", Toast.LENGTH_SHORT).show();
-            finish();
+            if(count == 0) {
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        User user = realm.createObject(User.class, n);
+                        user.setBirthdate(c.getTime());
+                        user.setPassword(p);
+                        user.setEmail(e);
+                    }
+                });
+                Toast.makeText(this, "User data saved!", Toast.LENGTH_SHORT).show();
+                finish();
+            } else {
+                Toast.makeText(this, "There is a user with that username already", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

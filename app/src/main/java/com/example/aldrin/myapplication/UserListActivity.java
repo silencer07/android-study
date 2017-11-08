@@ -1,5 +1,6 @@
 package com.example.aldrin.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -29,6 +31,11 @@ public class UserListActivity extends AppCompatActivity {
         RealmResults<User> users = realm.where(User.class).findAllSorted("username");
         ListAdapter adapter = new UserListAdapter(users);
         listView.setAdapter(adapter);
+    }
+
+    @Click(R.id.addUserButton)
+    public void register(){
+        startActivity(new Intent(this, RegisterActivity_.class));
     }
 
 }
